@@ -6,6 +6,7 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "Feneric/bodhi"
   config.vm.define "nimwasm"
+  config.vm.network "private_network", type: "dhcp"
   config.vm.provision "shell", name: "ppas", keep_color: true, inline: <<-SHELL
     # Temporarily turn off automatic updates to avoid interference.
     systemctl disable apt-daily.service
@@ -39,7 +40,7 @@ Vagrant.configure("2") do |config|
     aptitude -y safe-upgrade fish
     echo "***** DIST-UPGRADE FINISHED. *****"
     # Install dependencies.
-    aptitude -y install nim exuberant-ctags libsdl2-2.0-0 libsdl2-image-2.0-0 libsdl2-gfx-1.0-0 libsdl2-ttf-2.0-0 libsdl2-net-2.0-0 java9-runtime-headless
+    aptitude -y install nim exuberant-ctags libsdl2-2.0-0 libsdl2-image-2.0-0 libsdl2-gfx-1.0-0 libsdl2-ttf-2.0-0 libsdl2-net-2.0-0 java9-runtime-headless nginx
     echo "***** INSTALLATION FINISHED. *****"
     # Install Nim libs.
     yes | nimble install opengl png sdl2
@@ -51,6 +52,10 @@ Vagrant.configure("2") do |config|
     # This funny little dance gets around gnarly quoting issues.
     sed -e '1d;12d' /tmp/wasm-shell > /tmp/nim.cfg
     cat /tmp/nim.cfg >> /etc/nim.cfg
+    # Set up Nginx to serve samples.
+    ln -s /vagrant/Samples /var/www/html
+    sed -i -e 's/sendfile on;/sendfile on;\\n\\tdisable_symlinks off;\\n\\tautoindex on;/' /etc/nginx/nginx.conf
+    service nginx restart
   SHELL
   config.vm.provision "shell", name: "root", inline: $rootscript
   config.vm.provision "shell", name: "repositories", keep_color: true, inline: <<-SHELL
@@ -61,6 +66,8 @@ Vagrant.configure("2") do |config|
     cd ntags
     nimble install
     cp -p ntags /usr/local/bin
+    cd ../emsdk
+    ./emsdk install latest
     mkdir -p /home/vagrant/.vim/bundle
     cd /home/vagrant/.vim/bundle
     git clone git://github.com/zah/nim.vim.git
@@ -77,7 +84,6 @@ Vagrant.configure("2") do |config|
     cd /opt/bass
     make install
     cd ../emsdk
-    ./emsdk install latest
     ./emsdk activate latest
     echo "bass source /opt/emsdk/emsdk_env.sh --build=Release" >> /home/vagrant/.config/fish/config.fish
   SHELL

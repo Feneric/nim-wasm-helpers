@@ -1,6 +1,7 @@
 include Makefile
 CURL = curl
 SED = sed
+RM = rm
 
 template.html:
 	$(CURL) -s https://raw.githubusercontent.com/kripken/emscripten/master/src/shell_minimal.html > /tmp/template.html
@@ -8,4 +9,7 @@ template.html:
 
 hellodojo.html: hellodojo.nim template.html
 	$(NIM) c -d:emscripten -l:"--shell-file template.html" -o:$@ $(NIMFLAGS) $<
+
+clean:
+	$(RM) template.html hellodojo.js hellodojo.html hellodojo.wasm
 

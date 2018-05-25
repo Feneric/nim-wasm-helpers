@@ -1,0 +1,19 @@
+# Generated files local to this directory
+
+# Related to "hello.nim"
+hello.html
+hello.js
+hello.wasm
+hello
+
+# Related to "hellojs.nim"
+hellojs.html
+hellojs.js
+hellojs.wasm
+
+# Related to "hellodojo.nim"
+hellodojo.html
+hellodojo.js
+hellodojo.wasm
+template.html
+
