@@ -1,1 +1,17 @@
+# Nim
 nimcache/
+
+# Vim
+.*.swp
+
+# emacs
+*~
+\#*#
+.#*
+
+# Komodo
+*.komodoproject
+
+# macOS
+.DS_Store
+
