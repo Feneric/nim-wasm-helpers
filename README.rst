@@ -85,6 +85,21 @@ that exposes all the samples via the local Web address:
     incorporate this extra information into your regular ``Makefile``
     so you wouldn't need to use the extra ``-f`` flag and argument.
 
+Troubleshooting
+---------------
+
+If you are running into difficulties, you may find that it is just something
+transient and rerunning the ``vagrant up`` script may fix things. If you are
+specifically running into errors related to ``ifdown`` and ``ifup`` they are
+probably related to a known `Vagrant Ubuntu issue`_. The fix is to manually
+``vagrant ssh`` into the box after attempting the first ``vagrant up`` and
+type ``sudo aptitude install ifupdown`` in the shell. Once it completes, ``exit``
+the box and try ``vagrant up`` again.
+
+Beyond that it makes sense to enter the box and manually each of the steps
+listed in the ``Vagrantfile`` in order to see what fails when. This makes use
+of several unrelated packages, and new releases do sometimes break things. If
+you have some helpful tips, putting them into the wiki may help others, too.
 
 
 .. _Nim: https://nim-lang.org/
@@ -98,4 +113,4 @@ that exposes all the samples via the local Web address:
 .. _Fish: https://fishshell.com/
 .. _make: https://www.gnu.org/software/make/manual/html_node/
 .. _NGINX: https://www.nginx.com/
-
+.. _Vagrant Ubuntu issue: https://github.com/hashicorp/vagrant/issues/9134

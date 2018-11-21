@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
   config.vm.network "private_network", type: "dhcp"
   config.vm.provision "shell", name: "ppas", keep_color: true, inline: <<-SHELL
     # Temporarily turn off automatic updates to avoid interference.
-    systemctl disable apt-daily.service
+    #systemctl disable apt-daily.service
     systemctl disable apt-daily.timer
     pkill -9 apt-get
     # Add the PPA for the latest Nim release.
@@ -36,11 +36,11 @@ Vagrant.configure("2") do |config|
     aptitude -y update
     echo "***** UPDATE FINISHED. *****"
     # ideally we'd like to do the full upgrade here, but it's unreliable.
-    # aptitude --allow-untrusted -y dist-upgrade
-    aptitude -y safe-upgrade fish
+    aptitude --allow-untrusted -y dist-upgrade
+    #aptitude -y safe-upgrade fish
     echo "***** DIST-UPGRADE FINISHED. *****"
     # Install dependencies.
-    aptitude -y install nim exuberant-ctags libsdl2-2.0-0 libsdl2-image-2.0-0 libsdl2-gfx-1.0-0 libsdl2-ttf-2.0-0 libsdl2-net-2.0-0 java9-runtime-headless nginx
+    aptitude -y install nim exuberant-ctags libsdl2-2.0-0 libsdl2-image-2.0-0 libsdl2-gfx-1.0-0 libsdl2-ttf-2.0-0 libsdl2-net-2.0-0 default-jre-headless nginx
     echo "***** INSTALLATION FINISHED. *****"
     # Install Nim libs.
     yes | nimble install opengl png sdl2
@@ -48,7 +48,7 @@ Vagrant.configure("2") do |config|
     chsh -s /usr/bin/fish vagrant
     # Turn the automatic updates back on.
     systemctl enable apt-daily.timer
-    systemctl enable apt-daily.service
+    #systemctl enable apt-daily.service
     # This funny little dance gets around gnarly quoting issues.
     sed -e '1d;12d' /tmp/wasm-shell > /tmp/nim.cfg
     cat /tmp/nim.cfg >> /etc/nim.cfg
