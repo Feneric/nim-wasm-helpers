@@ -79,7 +79,7 @@ Vagrant.configure("2") do |config|
     cd /home/vagrant
     echo "execute pathogen#infect()" >> .vimrc
     mkdir .vim/autoload
-    curl -so .vim/autoload/pathogen.vim https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+    curl -Lso .vim/autoload/pathogen.vim https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
     mkdir -p .config/fish
     cd /opt/bass
     make install
